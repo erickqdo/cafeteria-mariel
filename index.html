@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Cafetería</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo-title">
+            <span class="logo">☕</span>
+            <div class="header-texts">
+                <h1>Cafetería Mariel</h1>
+                <span class="slogan">Sabor, aroma y tradición</span>
+            </div>
+        </div>
+        <div id="fecha-hora-actual" class="fecha-hora-actual"></div>
+    </header>
+    <section id="dashboard">
+        <h2 class="dashboard-title">Panel de Control</h2>
+        <div class="dashboard-cards">
+            <div class="card card-ingreso">
+                <div class="card-icon">📈</div>
+                <div class="card-info">
+                    <span class="card-label">Ingreso Diario</span>
+                    <span class="card-value" id="dash-ingreso-diario">$0.00</span>
+                </div>
+            </div>
+            <div class="card card-gasto">
+                <div class="card-icon">�</div>
+                <div class="card-info">
+                    <span class="card-label">Gasto Diario</span>
+                    <span class="card-value" id="dash-gasto-diario">$0.00</span>
+                </div>
+            </div>
+            <div class="card card-gasto">
+                <div class="card-icon">🗓️</div>
+                <div class="card-info">
+                    <span class="card-label">Ingreso Mensual</span>
+                    <span class="card-value" id="dash-ingreso-mensual">$0.00</span>
+                </div>
+            </div>
+            <div class="card card-gasto">
+                <div class="card-icon">🗓️</div>
+                <div class="card-info">
+                    <span class="card-label">Gasto Mensual</span>
+                    <span class="card-value" id="dash-gasto-mensual">$0.00</span>
+                </div>
+            </div>
+        </div>
+        <div class="dashboard-graph">
+            <canvas id="grafica-movimientos" height="80"></canvas>
+        </div>
+    </section>
+    <main>
+        <section class="bienvenida">
+            <h2>Bienvenido a Cafetería Mariel</h2>
+            <p>Administra tus ingresos, gastos e inventario de manera sencilla y visual. Utiliza el panel de control para ver el resumen de tu cafetería y los formularios para registrar tus movimientos diarios.</p>
+        </section>
+        <section id="movimientos-registrados">
+            <h2 style="cursor:pointer;" onclick="toggleMovimientos()">Movimientos Registrados</h2>
+            <div id="tabla-movimientos" style="display:none;"></div>
+        </section>
+        <script>
+        function toggleMovimientos() {
+            const tabla = document.getElementById('tabla-movimientos');
+            if (tabla.style.display === 'none' || tabla.style.display === '') {
+                tabla.style.display = 'block';
+                if (typeof mostrarTablaMovimientos === 'function') mostrarTablaMovimientos();
+            } else {
+                tabla.style.display = 'none';
+            }
+        }
+        </script>
+        <section id="registro">
+            <h2>Registrar Movimiento</h2>
+            <form id="form-movimiento">
+                <label>Tipo:
+                    <select id="tipo">
+                        <option value="ingreso">Ingreso</option>
+                        <option value="gasto">Gasto</option>
+                    </select>
+                </label>
+                <label>Descripción:
+                    <input type="text" id="descripcion" required>
+                </label>
+                <label>Monto:
+                    <input type="number" id="monto" required min="0" step="0.01">
+                </label>
+                <label>Fecha:
+                    <input type="date" id="fecha" required>
+                </label>
+                <button type="submit">Registrar</button>
+            </form>
+        </section>
+        <section id="reportes">
+            <h2>Reportes</h2>
+            <button onclick="mostrarReporte('semana')">Ver Semana Actual</button>
+            <button onclick="mostrarReporte('mes')">Ver Mes Actual</button>
+            <div id="reporte-resultado"></div>
+        </section>
+        <!-- Sección de inventario eliminada a solicitud del usuario -->
+    </main>
+    <footer class="main-footer">
+        <p>© 2025 Cafetería Mariel. Todos los derechos reservados.</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    // Fecha y hora actual en header, siempre actualizada
+    function actualizarFechaHora() {
+        const div = document.getElementById('fecha-hora-actual');
+        if (!div) return;
+        const ahora = new Date();
+        const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const fecha = ahora.toLocaleDateString('es-DO', opciones);
+        const hora = ahora.toLocaleTimeString('es-DO', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        div.textContent = `${fecha} | ${hora}`;
+    }
+    setInterval(actualizarFechaHora, 1000);
+    actualizarFechaHora();
+    </script>
+    <script src="app.js"></script>
+</body>
+</html>
